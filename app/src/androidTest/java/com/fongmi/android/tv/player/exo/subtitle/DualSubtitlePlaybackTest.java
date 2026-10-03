@@ -70,7 +70,7 @@ public class DualSubtitlePlaybackTest extends TestCase {
         instrumentation = InstrumentationRegistry.getInstrumentation();
         Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(AssPrototypeActivity.class.getName(), null, false);
         try (ParcelFileDescriptor fd = instrumentation.getUiAutomation().executeShellCommand(
-                "am start -W -f 0x10008000 -n com.fongmi.android.tv/.player.exo.ass.AssPrototypeActivity --ez no_subtitle true");
+                "am start -W -f 0x10008000 -n com.fongmi.android.tv.bzm/.player.exo.ass.AssPrototypeActivity --ez no_subtitle true");
              FileInputStream input = new FileInputStream(fd.getFileDescriptor())) {
             byte[] buffer = new byte[1024];
             while (input.read(buffer) != -1) { }

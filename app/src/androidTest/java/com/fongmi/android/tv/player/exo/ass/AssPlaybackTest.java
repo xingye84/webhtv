@@ -48,7 +48,7 @@ public class AssPlaybackTest extends TestCase {
         Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(
                 AssPrototypeActivity.class.getName(), null, false);
         try (ParcelFileDescriptor fd = instrumentation.getUiAutomation().executeShellCommand(
-                "am start -W -f 0x10008000 -n com.fongmi.android.tv/.player.exo.ass.AssPrototypeActivity"
+                "am start -W -f 0x10008000 -n com.fongmi.android.tv.bzm/.player.exo.ass.AssPrototypeActivity"
                         + " --ez enabled " + enabled + " --ez no_subtitle " + noSubtitle
                         + " --ez embedded " + embedded);
              FileInputStream input = new FileInputStream(fd.getFileDescriptor())) {
