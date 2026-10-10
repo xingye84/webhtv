@@ -128,8 +128,30 @@ public class Path {
 
     public static File local(String path) {
         path = path.replace("file:/", "");
+        File managed = customCspFile(path);
+        if (managed != null) return managed;
         File file = new File(root(), path);
         return file.exists() ? file : new File(path);
+    }
+
+    /** Stable logical URLs keep working after managed injection files move to private storage. */
+    public static File customCspFile(String path) {
+        String relative = path.replace('\\', '/');
+        while (relative.startsWith("//")) relative = relative.substring(1);
+        String shared = root().getAbsolutePath() + "/";
+        if (relative.startsWith(shared)) relative = relative.substring(shared.length());
+        else if (relative.startsWith("/sdcard/")) relative = relative.substring("/sdcard/".length());
+        while (relative.startsWith("/")) relative = relative.substring(1);
+        String prefix = "TV/CustomCsp";
+        if (!relative.equals(prefix) && !relative.startsWith(prefix + "/")) return null;
+        try {
+            File base = files(prefix).getCanonicalFile();
+            File file = files(relative).getCanonicalFile();
+            if (!file.toPath().startsWith(base.toPath())) throw new IllegalArgumentException("Invalid managed file path");
+            return file;
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Cannot resolve managed file", e);
+        }
     }
 
     public static String read(File file) {

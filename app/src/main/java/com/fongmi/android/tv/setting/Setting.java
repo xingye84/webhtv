@@ -756,8 +756,19 @@ public class Setting {
     }
 
     public static boolean hasFileAccess() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return Environment.isExternalStorageManager();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) return true;
+            return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && !hasFileManager() && ContextCompat.checkSelfPermission(App.get(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        }
         return ContextCompat.checkSelfPermission(App.get(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(App.get(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean isFileAsked() {
+        return Prefers.getBoolean("file_asked");
+    }
+
+    public static void putFileAsked() {
+        Prefers.put("file_asked", true);
     }
 
     public static boolean hasFileManager() {

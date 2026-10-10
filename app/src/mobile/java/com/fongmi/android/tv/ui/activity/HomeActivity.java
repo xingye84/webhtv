@@ -97,7 +97,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         mChrome = new WebHomeChromeController(this, mBinding, this, savedInstanceState, WebHomeChromeStartup.restore(mStartupConfig));
         mBinding.getRoot().addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> checkWindowShape(right - left, bottom - top));
         mBinding.navigation.setOnItemSelectedListener(this);
-        PermissionUtil.requestFile(this, allGranted -> PermissionUtil.requestNotify(this));
+        PermissionUtil.requestNotify(this);
         initFragment(savedInstanceState);
         initConfig();
     }

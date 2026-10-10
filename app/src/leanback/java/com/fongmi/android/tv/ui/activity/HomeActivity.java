@@ -156,7 +156,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     private void initAfterFirstFrame() {
         SpiderDebug.log("startup", "home first frame cost=%sms", System.currentTimeMillis() - App.time());
         App.post(this::initConfig, 80);
-        App.post(() -> PermissionUtil.requestFile(this, allGranted -> PermissionUtil.requestNotify(this)), 1800);
+        App.post(() -> PermissionUtil.requestNotify(this), 1800);
         App.post(() -> DLNARendererService.start(this), 2500);
     }
 

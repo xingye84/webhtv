@@ -290,7 +290,6 @@ public class CustomCspSetting {
     }
 
     public static void save(Registry registry) {
-        ensureFileAccess();
         Set<String> before = itemIds(load());
         File file = registryFile();
         String text = App.gson().toJson(registry.normalize());
@@ -300,7 +299,6 @@ public class CustomCspSetting {
     }
 
     public static void writePage(String id, String code) {
-        ensureFileAccess();
         File file = file(id, "index.html");
         String text = code == null ? "" : code;
         Path.write(file, text.getBytes(StandardCharsets.UTF_8));
@@ -308,14 +306,12 @@ public class CustomCspSetting {
     }
 
     public static void copyPage(File source, String id) {
-        ensureFileAccess();
         File file = file(id, "index.html");
         Path.copy(source, file);
         if (!source.exists() || !file.exists() || !Arrays.equals(Path.readToByte(source), Path.readToByte(file))) throw new IllegalStateException(App.get().getString(R.string.setting_custom_csp_save_failed, file.getAbsolutePath()));
     }
 
     public static String copyFile(File source, String id) {
-        ensureFileAccess();
         if (source == null || !source.isFile()) throw new IllegalStateException(App.get().getString(R.string.setting_custom_csp_save_failed, ""));
         File file = file(id, source.getName());
         try {
@@ -356,17 +352,13 @@ public class CustomCspSetting {
         for (String id : before) if (!after.contains(id)) deleteFiles(id);
     }
 
-    private static void ensureFileAccess() {
-        if (!Setting.hasFileAccess()) throw new IllegalStateException(App.get().getString(R.string.setting_custom_csp_permission_required));
-    }
-
     private static void ensureWritten(File file, String text) {
         if (!file.exists() || !TextUtils.equals(Path.read(file), text)) throw new IllegalStateException(App.get().getString(R.string.setting_custom_csp_save_failed, file.getAbsolutePath()));
     }
 
-    public static File dir() {
-        File dir = Path.root(DIR);
-        if (!dir.exists()) dir.mkdirs();
+    public static synchronized File dir() {
+        File dir = Path.files(DIR);
+        if (!dir.exists() && !dir.mkdirs()) throw new IllegalStateException("无法创建站点注入目录");
         return dir;
     }
 

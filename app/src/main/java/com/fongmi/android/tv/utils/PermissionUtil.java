@@ -25,6 +25,15 @@ public class PermissionUtil {
         else PermissionX.init(activity).permissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).request(new PermissionCallback(result -> finishFileRequest(callback, result)));
     }
 
+    public static void requestFileOnce(FragmentActivity activity, Consumer<Boolean> callback) {
+        if (Setting.hasFileAccess() || Setting.isFileAsked()) {
+            if (callback != null) callback.accept(Setting.hasFileAccess());
+            return;
+        }
+        Setting.putFileAsked();
+        requestFile(activity, callback);
+    }
+
     public static void requestFile(Fragment fragment, Consumer<Boolean> callback) {
         if (hasFileAccess(callback)) return;
         SpiderDebug.log("permission", "request file access managerAvailable=%s", Setting.hasFileManager());
