@@ -137,7 +137,7 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
     public void setConfig(Config config) {
         if (config == null) return;
         String url = config.getUrl();
-        if (!TextUtils.isEmpty(url) && url.startsWith("file")) {
+        if (PermissionUtil.requiresFileAccess(url)) {
             requireView().post(() -> PermissionUtil.requestFile(this, allGranted -> load(config)));
         } else {
             load(config);

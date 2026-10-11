@@ -97,8 +97,25 @@ public class FileChooser {
         return paths;
     }
 
+    public static List<String> getCopiesFromIntent(Intent intent) {
+        List<String> paths = new ArrayList<>();
+        if (intent == null) return paths;
+        ClipData clipData = intent.getClipData();
+        if (clipData != null) {
+            for (int i = 0; i < clipData.getItemCount(); i++) addCopy(paths, clipData.getItemAt(i).getUri());
+        }
+        addCopy(paths, intent.getData());
+        return paths;
+    }
+
     private static void addPath(List<String> paths, Uri uri) {
         String path = getPathFromUri(uri);
+        if (path != null && !path.isEmpty() && !paths.contains(path)) paths.add(path);
+    }
+
+    private static void addCopy(List<String> paths, Uri uri) {
+        if (uri == null) return;
+        String path = ContentResolver.SCHEME_CONTENT.equals(uri.getScheme()) ? createFileFromUri(App.get(), uri) : getPathFromUri(uri);
         if (path != null && !path.isEmpty() && !paths.contains(path)) paths.add(path);
     }
 
