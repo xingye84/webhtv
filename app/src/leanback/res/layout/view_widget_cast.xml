@@ -45,7 +45,7 @@
             android:layout_alignParentEnd="true"
             android:fontFeatureSettings="tnum"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="32sp"
             tools:text="09:20:00" />
 
     </RelativeLayout>
