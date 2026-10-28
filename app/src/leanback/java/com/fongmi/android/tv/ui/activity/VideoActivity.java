@@ -6344,10 +6344,12 @@ public class VideoActivity extends PlaybackActivity implements CustomKeyDownVod.
             hideCenter();
         } else if (isFullscreen()) {
             exitFullscreen();
+        } else if (mBinding.progressLayout.isProgress() || mBinding.progressLayout.isEmpty()) {
+            finishVideoPlayback();
         } else {
             View focus = getCurrentFocus();
-            if (focus != mBinding.video && !isChildOf(mBinding.video, focus)) {
-                mBinding.video.requestFocus();
+            if (focus != null && focus != mBinding.video && !isChildOf(mBinding.video, focus)) {
+                if (!mBinding.video.requestFocus()) finishVideoPlayback();
                 return;
             }
             finishVideoPlayback();
