@@ -746,7 +746,7 @@ public class VideoActivity extends PlaybackActivity implements CustomKeyDownVod.
             @Override
             public void onChildViewHolderSelected(@NonNull RecyclerView parent, @Nullable RecyclerView.ViewHolder child, int position, int subposition) {
                 int count = mEpisodeAdapter.getItemCount();
-                if (child == null || !parent.hasFocus() || count <= getEpisodeSegmentSize(count) || position <= 1) return;
+                if (child == null || !parent.hasFocus() || position <= 1) return;
                 int start = mArrayAdapter.getStart(position);
                 int current = mEpisodeAdapter.getPosition();
                 scrollToEpisode(current >= start && current < start + getEpisodeSegmentSize(count) ? current : start);
@@ -818,7 +818,7 @@ public class VideoActivity extends PlaybackActivity implements CustomKeyDownVod.
         mBinding.episode.setNumColumns(episodeColumn);
         mBinding.episode.setHorizontalSpacing(ResUtil.dp2px(8));
         mBinding.episode.setVerticalSpacing(ResUtil.dp2px(8));
-        mBinding.episode.setWindowAlignment(VerticalGridView.WINDOW_ALIGN_LOW_EDGE);
+        mBinding.episode.setWindowAlignment(VerticalGridView.WINDOW_ALIGN_BOTH_EDGE);
         mBinding.episode.setWindowAlignmentPreferKeyLineOverLowEdge(false);
         mBinding.episode.setWindowAlignmentPreferKeyLineOverHighEdge(false);
         mBinding.episode.setWindowAlignmentOffset(0);
